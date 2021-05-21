@@ -77,7 +77,6 @@ pylith::topology::TestFieldMesh::testConstructor(void) {
 void
 pylith::topology::TestFieldMesh::testCopyConstructor(void) {
     PYLITH_METHOD_BEGIN;
-#if 0
     _initialize();
     CPPUNIT_ASSERT(_mesh);
     CPPUNIT_ASSERT(_field);
@@ -130,7 +129,7 @@ pylith::topology::TestFieldMesh::testCopyConstructor(void) {
     } // for
 
     field.deallocate();
-#endif
+
     PYLITH_METHOD_END;
 } // testCopyConstructor
 
@@ -218,14 +217,15 @@ pylith::topology::TestFieldMesh::testVectorAccessors(void) {
     err = VecGetSize(localVec, &size);CPPUNIT_ASSERT(!err);
     CPPUNIT_ASSERT_EQUAL(ndof, size);
 
+#if 0
     _field->createGlobalVector();
     const PetscVec& globalVec = _field->globalVector();CPPUNIT_ASSERT(globalVec);
     _field->scatterLocalToVector(globalVec);
     err = PetscObjectGetName((PetscObject)globalVec, &name);CPPUNIT_ASSERT(!err);
     CPPUNIT_ASSERT_EQUAL(std::string(_field->getLabel()), std::string(name));
     err = VecGetSize(globalVec, &size);CPPUNIT_ASSERT(!err);
-
     CPPUNIT_ASSERT_EQUAL(ndof - ndofConstrained, size);
+#endif
 
     _field->createOutputVector();
     _field->scatterLocalToOutput();
@@ -234,8 +234,6 @@ pylith::topology::TestFieldMesh::testVectorAccessors(void) {
     CPPUNIT_ASSERT_EQUAL(std::string(_field->getLabel()), std::string(name));
     err = VecGetSize(outputVec, &size);CPPUNIT_ASSERT(!err);
     CPPUNIT_ASSERT_EQUAL(ndof, size);
-    VecView(localVec, PETSC_VIEWER_STDOUT_WORLD);
-    VecView(outputVec, PETSC_VIEWER_STDOUT_WORLD);
     _checkValues(outputVec);
 
     PYLITH_METHOD_END;
@@ -516,7 +514,6 @@ pylith::topology::TestFieldMesh::_checkValues(const PetscVec& vec,
     const PylithReal tolerance = 1.0e-6;
     CPPUNIT_ASSERT_EQUAL(sizeE, size);
     for (PylithInt i = 0; i < sizeE; ++i) {
-        std::cout << "scale="<<scale << ", valueE=" << valuesE[i]*scale << ", value=" << vecArray[i] << std::endl;
         CPPUNIT_ASSERT_DOUBLES_EQUAL(valuesE[i]*scale, vecArray[i], tolerance);
     } // for
     err = VecRestoreArray(vec, &vecArray);CPPUNIT_ASSERT(!err);

@@ -53,7 +53,6 @@ pylith::topology::Field::Field(const Mesh& mesh) :
         PetscVec coordVec = NULL;
         PetscErrorCode err;
 
-        err = DMDestroy(&_dm);PYLITH_CHECK_ERROR(err);
         err = DMClone(dm, &_dm);PYLITH_CHECK_ERROR(err);
         err = DMGetCoordinatesLocal(dm, &coordVec);PYLITH_CHECK_ERROR(err);
         if (coordVec) {
@@ -79,7 +78,7 @@ pylith::topology::Field::Field(const Mesh& mesh) :
 // Constructor with field to use for layout.
 pylith::topology::Field::Field(const Field& src) :
     _mesh(src._mesh),
-    _dm(src._dm),
+    _dm(NULL),
     _localVec(NULL),
     _globalVec(NULL),
     _outputVec(NULL) {
@@ -90,6 +89,27 @@ pylith::topology::Field::Field(const Field& src) :
 
     PetscErrorCode err;
     const char* name = NULL;
+
+    if (src.dmMesh()) {
+        PetscDM dm = src.dmMesh();assert(dm);
+        PetscVec coordVec = NULL;
+        PetscErrorCode err;
+
+        err = DMClone(dm, &_dm);PYLITH_CHECK_ERROR(err);
+        err = DMGetCoordinatesLocal(dm, &coordVec);PYLITH_CHECK_ERROR(err);
+        if (coordVec) {
+            PetscDM coordDM = NULL, newCoordDM = NULL;
+            PetscSection coordSection = NULL, newCoordSection = NULL;
+
+            err = DMGetCoordinateDM(dm, &coordDM);PYLITH_CHECK_ERROR(err);
+            err = DMGetCoordinateDM(_dm, &newCoordDM);PYLITH_CHECK_ERROR(err);
+            err = DMGetSection(coordDM, &coordSection);PYLITH_CHECK_ERROR(err);
+            err = PetscSectionClone(coordSection, &newCoordSection);PYLITH_CHECK_ERROR(err);
+            err = DMSetSection(newCoordDM, newCoordSection);PYLITH_CHECK_ERROR(err);
+            err = PetscSectionDestroy(&newCoordSection);PYLITH_CHECK_ERROR(err);
+            err = DMSetCoordinatesLocal(_dm, coordVec);PYLITH_CHECK_ERROR(err);
+        } // if
+    } // if
 
     assert(_dm);
     PetscSection srcSection = src.localSection();
@@ -701,7 +721,7 @@ pylith::topology::Field::createGlobalVector(void) {
     PYLITH_METHOD_BEGIN;
 
     PetscErrorCode err = VecDestroy(&_globalVec);PYLITH_CHECK_ERROR(err);
-    err = DMGetGlobalVector(_dm, &_globalVec);PYLITH_CHECK_ERROR(err);assert(_globalVec);
+    err = DMCreateGlobalVector(_dm, &_globalVec);PYLITH_CHECK_ERROR(err);assert(_globalVec);
     err = PetscObjectSetName((PetscObject) _globalVec, getLabel());PYLITH_CHECK_ERROR(err);
 
     PYLITH_METHOD_END;
@@ -718,7 +738,7 @@ pylith::topology::Field::createOutputVector(void) {
 
     PetscDM dmOutput = NULL;
     err = DMGetOutputDM(_dm, &dmOutput);PYLITH_CHECK_ERROR(err);
-    err = DMGetGlobalVector(dmOutput, &_outputVec);PYLITH_CHECK_ERROR(err);assert(_outputVec);
+    err = DMCreateGlobalVector(dmOutput, &_outputVec);PYLITH_CHECK_ERROR(err);assert(_outputVec);
     err = PetscObjectSetName((PetscObject) _outputVec, getLabel());PYLITH_CHECK_ERROR(err);
 
     PYLITH_METHOD_END;

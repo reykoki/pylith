@@ -73,25 +73,9 @@ pylith::feassemble::PhysicsImplementation::getAuxiliaryField(void) const {
 
 
 // ------------------------------------------------------------------------------------------------
-// Get auxiliary field.
-pylith::topology::Field*
-pylith::feassemble::PhysicsImplementation::getAuxiliaryField(void) {
-    return _auxiliaryField;
-} // getAuxiliaryField
-
-
-// ------------------------------------------------------------------------------------------------
 // Get derived field.
 const pylith::topology::Field*
 pylith::feassemble::PhysicsImplementation::getDerivedField(void) const {
-    return _derivedField;
-} // getDerivedField
-
-
-// ------------------------------------------------------------------------------------------------
-// Get derived field.
-pylith::topology::Field*
-pylith::feassemble::PhysicsImplementation::getDerivedField(void) {
     return _derivedField;
 } // getDerivedField
 

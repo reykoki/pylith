@@ -117,8 +117,8 @@ pylith::meshio::OutputSolnBoundary::_writeSolnStep(const PylithReal t,
             throw std::runtime_error(msg.str());
         } // if
 
-        pylith::topology::Field* fieldBuffer = _getBuffer(solution, subfieldNames[iField].c_str());assert(fieldBuffer);
-        _appendField(t, fieldBuffer, *_boundaryMesh);
+        // :TODO:
+        // _appendField(t, fieldBuffer, *_boundaryMesh);
     } // for
     _closeSolnStep();
 

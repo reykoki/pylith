@@ -18,36 +18,40 @@
 
 #include <portinfo>
 
-#include "FieldFilterNone.hh" \
-    // Implementation of class methods
+#include "FieldFilterNone.hh" // Implementation of class methods
 
-// ----------------------------------------------------------------------
+#include "pylith/utils/error.hh" // USES PYLITH_CHECK_ERROR
+
+// ------------------------------------------------------------------------------------------------
 // Constructor
 pylith::meshio::FieldFilterNone::FieldFilterNone(void) {}
 
-// ----------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
 // Destructor
 pylith::meshio::FieldFilterNone::~FieldFilterNone(void) {}
 
-// ----------------------------------------------------------------------
-// Copy constructor.
-pylith::meshio::FieldFilterNone::FieldFilterNone(const FieldFilterNone& f) :
-    FieldFilter(f)
-{}
 
-// ----------------------------------------------------------------------
-// Create copy of filter.
-pylith::meshio::FieldFilter*
-pylith::meshio::FieldFilterNone::clone(void) const {
-    return new FieldFilterNone(*this);
-} // clone
+// ------------------------------------------------------------------------------------------------
+// Create DM associated with filtered field.
+PetscDM
+pylith::meshio::FieldFilterNone::createDM(PetscDM dm,
+                                          const pylith::topology::FieldBase::Description& description,
+                                          const pylith::topology::FieldBase::Discretization& discretization) const {
+    PetscErrorCode err = PetscObjectReference((PetscObject)dm);PYLITH_CHECK_ERROR(err);
+    return dm;
+}
 
-// ----------------------------------------------------------------------
-// Filter field.
-pylith::topology::Field*
-pylith::meshio::FieldFilterNone::filter(pylith::topology::Field* fieldIn) {
-    return fieldIn;
-} // filter
+
+// ------------------------------------------------------------------------------------------------
+// Apply filter to global PETSc vector.
+void
+pylith::meshio::FieldFilterNone::apply(PetscVec* vectorOut,
+                                       PetscDM dmOut,
+                                       PetscVec vectorIn) const {
+    assert(vectorOut);
+    assert(*vectorOut == vectorIn);
+}
 
 
 // End of file

@@ -57,8 +57,7 @@ public:
 };
 
 // FieldOps -------------------------------------------------------------
-/// @brief C++ class for simple operations for a Field object.
-class pylith::topology::FieldOps { // FieldOps
+class pylith::topology::FieldOps {
     friend class TestFieldOps; // unit testing
 
     // PUBLIC METHODS ///////////////////////////////////////////////////////
@@ -107,6 +106,15 @@ public:
      */
     static
     pylith::string_vector getSubfieldNamesDomain(const pylith::topology::Field& field);
+
+    /** Get basis order for field.
+     *
+     * @warning Throws std::logic_error() if PetscDS contains more than one subfield.
+     *
+     * @param[in] dm PETSc DM associated with field.
+     */
+    static
+    int getBasisOrder(const PetscDM dm);
 
     /** Check to see if fields have the same subfields and match in size.
      *

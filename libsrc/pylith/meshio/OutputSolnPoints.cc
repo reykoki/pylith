@@ -127,8 +127,8 @@ pylith::meshio::OutputSolnPoints::_writeSolnStep(const PylithReal t,
             throw std::runtime_error(msg.str());
         } // if
 
-        pylith::topology::Field* fieldBuffer = _getBuffer(*solutionInterp, subfieldNames[iField].c_str());assert(fieldBuffer);
-        _appendField(t, fieldBuffer, *_pointsMesh);
+        // :TODO:
+        // _appendField(t, fieldBuffer, *_pointsMesh);
     } // for
     _closeSolnStep();
 
@@ -223,6 +223,9 @@ pylith::topology::Field*
 pylith::meshio::OutputSolnPoints::_interpolateField(const pylith::topology::Field& field) {
     PYLITH_METHOD_BEGIN;
 
+#if 1
+    pylith::topology::Field* fieldInterp = NULL;
+#else
     // Create field if necessary for interpolated values or recreate
     // field if mismatch in size between buffer and field.
     const std::string& fieldName = std::string(field.getLabel()) + " (interpolated)";
@@ -261,6 +264,7 @@ pylith::meshio::OutputSolnPoints::_interpolateField(const pylith::topology::Fiel
 
     err = DMInterpolationSetDof(_interpolator, numDof);PYLITH_CHECK_ERROR(err);
     err = DMInterpolationEvaluate(_interpolator, field.dmMesh(), field.localVector(), fieldInterp->localVector());PYLITH_CHECK_ERROR(err);
+#endif
 
     PYLITH_METHOD_RETURN(fieldInterp);
 } // appendVertexField

@@ -219,6 +219,18 @@ pylith::topology::FieldOps::getSubfieldNamesDomain(const pylith::topology::Field
 } // getSubfieldNamesDomain
 
 
+// ------------------------------------------------------------------------------------------------
+// Get basis order of field.
+int
+pylith::topology::FieldOps::getBasisOrder(const PetscDM dm) {
+    PYLITH_METHOD_BEGIN;
+
+    int basisOrder = -1;
+
+    PYLITH_METHOD_RETURN(basisOrder);
+} // getBasisOrder
+
+
 // ----------------------------------------------------------------------
 // Check to see if fields have the same subfields and match in size.
 bool

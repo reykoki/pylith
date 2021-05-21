@@ -55,11 +55,11 @@ pylith::meshio::OutputSolnDomain::_writeSolnStep(const PylithReal t,
         if (!solution.hasSubfield(subfieldNames[iField].c_str())) {
             std::ostringstream msg;
             msg << "Internal Error: Could not find subfield '" << subfieldNames[iField] << "' in solution for output.";
-            throw std::runtime_error(msg.str());
+            throw std::logic_error(msg.str());
         } // if
 
-        pylith::topology::Field* fieldBuffer = _getBuffer(solution, subfieldNames[iField].c_str());assert(fieldBuffer);
-        _appendField(t, fieldBuffer, fieldBuffer->mesh());
+        // :TODO:
+        // _appendField(t, fieldBuffer, fieldBuffer->mesh());
     } // for
     _closeSolnStep();
 

@@ -25,15 +25,10 @@
 #if !defined(pylith_meshio_fieldfilternone_hh)
 #define pylith_meshio_fieldfilternone_hh
 
-// Include directives ---------------------------------------------------
 #include "FieldFilter.hh" // ISA FieldFilter
 
-// FieldFilterNone --------------------------------------------------
-/** @brief C++ object for no filtering.
- */
 class pylith::meshio::FieldFilterNone : public FieldFilter {
-
-    // PUBLIC METHODS ///////////////////////////////////////////////////////
+    // PUBLIC METHODS /////////////////////////////////////////////////////////////////////////////
 public:
 
     /// Constructor
@@ -42,38 +37,34 @@ public:
     /// Destructor
     ~FieldFilterNone(void);
 
-    /** Create copy of filter.
+    /** Create DM associated with filtered field.
      *
-     * @returns Copy of filter.
+     * @param[in] dm PETSc DM of unfiltered field.
+     * @param[in] description Description of input field.
+     * @param[in] discretization Discretization of input field.
      */
-    FieldFilter* clone(void) const;
+    PetscDM createDM(PetscDM dm,
+                     const pylith::topology::FieldBase::Description& description,
+                     const pylith::topology::FieldBase::Discretization& discretization) const;
 
-    /** Filter field.
+    /** Apply filter to global PETSc vector.
      *
-     * @param fieldIn Field to filter.
-     * @returns Field field passed in without changes.
+     * @param[out] vectorOut Filtered global PETSc vector.
+     * @param[in] dmOut PETSc DM associated with filtered global PETSc vector.
+     * @param[in] vectorIn PETSc global vector to filter.
      */
-    pylith::topology::Field* filter(pylith::topology::Field* fieldIn);
-
-    // PROTECTED METHODS ////////////////////////////////////////////////////
-protected:
-
-    /** Copy constructor.
-     *
-     * @param f Filter to copy.
-     * @returns Pointer to this.
-     */
-    FieldFilterNone(const FieldFilterNone& f);
+    void apply(PetscVec* vectorOut,
+               PetscDM dmOut,
+               PetscVec vectorIn) const;
 
     // NOT IMPLEMENTED //////////////////////////////////////////////////////
 private:
 
-    /// Not implemented.
-    const FieldFilterNone& operator=(const FieldFilterNone&);
+    FieldFilterNone(const FieldFilterNone&); ///< Not implemented.
+    const FieldFilterNone& operator=(const FieldFilterNone&); ///< Not implemented.
 
 }; // FieldFilterNone
 
 #endif // pylith_meshio_fieldfilternone_hh
-
 
 // End of file

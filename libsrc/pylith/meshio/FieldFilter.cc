@@ -18,12 +18,12 @@
 
 #include <portinfo>
 
-#include "FieldFilter.hh" \
-    // Implementation of class methods
+#include "FieldFilter.hh" // Implementation of class methods
 
 // ----------------------------------------------------------------------
 // Constructor
 pylith::meshio::FieldFilter::FieldFilter(void) {}
+
 
 // ----------------------------------------------------------------------
 // Destructor
@@ -31,21 +31,11 @@ pylith::meshio::FieldFilter::~FieldFilter(void) {
     deallocate();
 } // destructor
 
+
 // ----------------------------------------------------------------------
 // Deallocate PETSc and local data structures.
 void
 pylith::meshio::FieldFilter::deallocate(void) {}
-
-// ----------------------------------------------------------------------
-// Copy constructor.
-pylith::meshio::FieldFilter::FieldFilter(const FieldFilter& f) {}
-
-// ----------------------------------------------------------------------
-// operator=.
-const pylith::meshio::FieldFilter&
-pylith::meshio::FieldFilter::operator=(const FieldFilter& f) {
-    return f;
-} // operator=
 
 
 // End of file

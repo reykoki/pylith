@@ -37,6 +37,7 @@ subpkginclude_HEADERS = \
 	MeshIOLagrit.hh \
 	MeshIOLagrit.icc \
 	OutputObserver.hh \
+	OutputSubfield.hh \
 	OutputSoln.hh \
 	OutputSolnDomain.hh \
 	OutputSolnBoundary.hh \

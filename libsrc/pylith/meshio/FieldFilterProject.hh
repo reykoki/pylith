@@ -37,27 +37,31 @@ public:
     /// Destructor
     ~FieldFilterProject(void);
 
-    /** Create copy of filter.
-     *
-     * @returns Copy of filter.
-     */
-    FieldFilter* clone(void) const;
-
-    /// Deallocate PETSc and local data structures.
-    void deallocate(void);
-
     /** Set basis order for projected field.
      *
      * @param[in] value Basis order.
      */
-    void basisOrder(const int value);
+    void setBasisOrder(const int value);
 
-    /** Filter vertex field.
+    /** Create DM associated with filtered field.
      *
-     * @returns Field after applying filter.
-     * @param fieldIn Field to filter.
+     * @param[in] dm PETSc DM of unfiltered field.
+     * @param[in] description Description of input field.
+     * @param[in] discretization Discretization of input field.
      */
-    pylith::topology::Field* filter(pylith::topology::Field* fieldIn);
+    PetscDM createDM(PetscDM dm,
+                     const pylith::topology::FieldBase::Description& description,
+                     const pylith::topology::FieldBase::Discretization& discretization) const;
+
+    /** Apply filter to global PETSc vector.
+     *
+     * @param[out] vectorOut Filtered global PETSc vector.
+     * @param[in] dmOut PETSc DM associated with filtered global PETSc vector.
+     * @param[in] vectorIn PETSc global vector to filter.
+     */
+    void apply(PetscVec* vectorOut,
+               PetscDM dmOut,
+               PetscVec vectorIn) const;
 
     /** Pass thru solution in pointwise function.
      *
@@ -102,28 +106,17 @@ public:
                       const PylithScalar constants[],
                       PylithScalar field[]);
 
-    // PROTECTED METHODS ///////////////////////////////////////////////////////////////////////////////////////////////
-protected:
-
-    /** Copy constructor.
-     *
-     * @param f Filter to copy.
-     * @returns Pointer to this.
-     */
-    FieldFilterProject(const FieldFilterProject& f);
-
     // PRIVATE MEMBERS /////////////////////////////////////////////////////////////////////////////////////////////////
 private:
 
-    pylith::topology::Field* _fieldProj; ///< Projected field.
-    PetscPointFunc* _passThruFns; ///< Pass through point functions.
+    PetscPointFunc _passThruFns[1]; ///< Pass through point functions.
     int _basisOrder; ///< Basis order for projected field.
 
     // NOT IMPLEMENTED /////////////////////////////////////////////////////////////////////////////////////////////////
 private:
 
-    /// Not implemented.
-    const FieldFilterProject& operator=(const FieldFilterProject&);
+    FieldFilterProject(const FieldFilterProject& f); ///< Not implemented.
+    const FieldFilterProject& operator=(const FieldFilterProject&); ///< Not implemented.
 
 }; // FieldFilterProject
 

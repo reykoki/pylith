@@ -219,6 +219,7 @@ void
 pylith::meshio::OutputSoln::_appendField(const PylithReal t,
                                          pylith::topology::Field* field,
                                          const pylith::topology::Mesh& mesh) {
+#if 0
     PYLITH_METHOD_BEGIN;
     PYLITH_COMPONENT_DEBUG("OutputSoln::appendField(t="<<t<<", field="<<typeid(field).name()<<", mesh="<<typeid(mesh).name()<<")");
 
@@ -246,6 +247,7 @@ pylith::meshio::OutputSoln::_appendField(const PylithReal t,
     } // switch
 
     PYLITH_METHOD_END;
+#endif
 } // _appendField
 
 

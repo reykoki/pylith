@@ -31,7 +31,7 @@
 #include <cassert> // USES assert()
 #include <stdexcept> // USES std::runtime_error
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Default constructor.
 pylith::feassemble::PhysicsImplementation::PhysicsImplementation(pylith::problems::Physics* const physics) :
     _physics(physics),
@@ -42,14 +42,14 @@ pylith::feassemble::PhysicsImplementation::PhysicsImplementation(pylith::problem
 {}
 
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Destructor.
 pylith::feassemble::PhysicsImplementation::~PhysicsImplementation(void) {
     deallocate();
 } // destructor
 
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Deallocate PETSc and local data structures.
 void
 pylith::feassemble::PhysicsImplementation::deallocate(void) {
@@ -64,7 +64,7 @@ pylith::feassemble::PhysicsImplementation::deallocate(void) {
 } // deallocate
 
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Get auxiliary field.
 const pylith::topology::Field*
 pylith::feassemble::PhysicsImplementation::getAuxiliaryField(void) const {
@@ -72,7 +72,15 @@ pylith::feassemble::PhysicsImplementation::getAuxiliaryField(void) const {
 } // getAuxiliaryField
 
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+// Get auxiliary field.
+pylith::topology::Field*
+pylith::feassemble::PhysicsImplementation::getAuxiliaryField(void) {
+    return _auxiliaryField;
+} // getAuxiliaryField
+
+
+// ------------------------------------------------------------------------------------------------
 // Get derived field.
 const pylith::topology::Field*
 pylith::feassemble::PhysicsImplementation::getDerivedField(void) const {
@@ -80,7 +88,15 @@ pylith::feassemble::PhysicsImplementation::getDerivedField(void) const {
 } // getDerivedField
 
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+// Get derived field.
+pylith::topology::Field*
+pylith::feassemble::PhysicsImplementation::getDerivedField(void) {
+    return _derivedField;
+} // getDerivedField
+
+
+// ------------------------------------------------------------------------------------------------
 // Notify observers of current solution.
 void
 pylith::feassemble::PhysicsImplementation::notifyObservers(const PylithReal t,

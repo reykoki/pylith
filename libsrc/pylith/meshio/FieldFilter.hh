@@ -30,13 +30,13 @@
 
 #include "pylith/utils/PyreComponent.hh" // ISA PyreComponent
 
-#include "pylith/topology/topologyfwd.hh" // USES Field
+#include "pylith/topology/FieldBase.hh" // USES FieldBase
+#include "pylith/utils/petscfwd.h" // USES PetscDM, PetscVec
 
 // FieldFilter ---------------------------------------------------------
 /** @brief C++ object for filtering field upon output, etc.
  */
 class pylith::meshio::FieldFilter : public pylith::utils::PyreComponent {
-
     // PUBLIC METHODS ///////////////////////////////////////////////////////
 public:
 
@@ -50,42 +50,38 @@ public:
     virtual
     void deallocate(void);
 
-    /** Create copy of filter.
+    /** Create DM associated with filtered field.
      *
-     * @returns Copy of filter.
+     * @param[in] dm PETSc DM of unfiltered field.
+     * @param[in] description Description of input field.
+     * @param[in] discretization Discretization of input field.
      */
     virtual
-    FieldFilter* clone(void) const = 0;
+    PetscDM createDM(PetscDM dm,
+                     const pylith::topology::FieldBase::Description& description,
+                     const pylith::topology::FieldBase::Discretization& discretization) const = 0;
 
-    /** Filter field.
+    /** Apply filter to global PETSc vector.
      *
-     * @param fieldIn Field to filter.
-     * @returns Field after applying filter.
+     * @param[out] vectorOut Filtered global PETSc vector.
+     * @param[in] dmOut PETSc DM associated with filtered global PETSc vector.
+     * @param[in] vectorIn PETSc global vector to filter.
      */
     virtual
-    pylith::topology::Field* filter(pylith::topology::Field* fieldIn) = 0;
+    void apply(PetscVec* vectorOut,
+               PetscDM dmOut,
+               PetscVec vectorIn) const = 0;
 
     // PROTECTED METHODS ////////////////////////////////////////////////////
 protected:
 
-    /** Copy constructor.
-     *
-     * @param f Filter to copy.
-     * @returns Pointer to this.
-     */
-    FieldFilter(const FieldFilter& f);
-
 private:
-    /** operator=.
-     *
-     * @param f Filter to copy.
-     * @returns Copy of filter.
-     */
-    const FieldFilter& operator=(const FieldFilter& f);
+
+    FieldFilter(const FieldFilter&); ///< Not implemented
+    const FieldFilter& operator=(const FieldFilter&); ///< Not implemented.
 
 }; // FieldFilter
 
 #endif // pylith_meshio_fieldfilter_hh
-
 
 // End of file

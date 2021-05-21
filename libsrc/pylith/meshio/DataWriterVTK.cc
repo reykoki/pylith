@@ -184,10 +184,9 @@ pylith::meshio::DataWriterVTK::openTimeStep(const PylithScalar t,
     assert(_dm && _dm == mesh.dmMesh());
     assert(_isOpen && !_isOpenTimeStep);
 
-    PetscErrorCode err = 0;
-
     const std::string& filename = _vtkFilename(t);
-    err = PetscViewerVTKOpen(mesh.comm(), filename.c_str(), FILE_MODE_WRITE, &_viewer);
+    PetscErrorCode err = PetscViewerVTKOpen(mesh.comm(), filename.c_str(), FILE_MODE_WRITE,
+                                            &_viewer);PYLITH_CHECK_ERROR(err);
 
     _isOpenTimeStep = true;
 

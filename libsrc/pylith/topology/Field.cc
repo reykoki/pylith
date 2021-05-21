@@ -124,6 +124,7 @@ pylith::topology::Field::deallocate(void) {
 
     PetscErrorCode err;
     err = VecDestroy(&_localVec);PYLITH_CHECK_ERROR(err);
+    err = VecDestroy(&_globalVec);PYLITH_CHECK_ERROR(err);
     err = VecDestroy(&_outputVec);PYLITH_CHECK_ERROR(err);
     err = DMDestroy(&_dm);PYLITH_CHECK_ERROR(err);
 

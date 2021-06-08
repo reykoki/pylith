@@ -56,7 +56,7 @@ public:
 pylith::meshio::MeshIOPETSc::MeshIOPETSc(void) :
     _filename(""),
     _useIndexZero(true) { // constructor
-    PyreComponent::setName("meshioascii");
+    PyreComponent::setName("meshiopetsc");
 } // constructor
 
 
@@ -87,6 +87,10 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     PYLITH_COMPONENT_DEBUG("_read()");
 
     const int commRank = _mesh->commRank();
+    DMCreate(commRank, &dm);
+    DMSetType(dm, DMPLEX);
+    DMSetFromOptions(dm);
+
     int meshDim = 0;
     int spaceDim = 0;
     int numVertices = 0;
@@ -119,10 +123,6 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
             msg << "Expected 'mesh' token but encountered '" << token << "'\n";
             throw std::runtime_error(msg.str());
         } // if
-
-        DMCreate(commRank, &dm);
-        DMSetType(dm, DMPLEX);
-        DMSetFromOptions(dm);
 
         bool readDim = false;
         bool readCells = false;
@@ -186,13 +186,13 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
             }
         } catch (const std::exception& err) {
             std::ostringstream msg;
-            msg << "Error occurred while reading PyLith mesh ASCII file '"
+            msg << "Error occurred while reading PyLith mesh PETSc file '"
                 << _filename << "'.\n"
                 << err.what();
             throw std::runtime_error(msg.str());
         } catch (...) {
             std::ostringstream msg;
-            msg << "Unknown I/O error while reading PyLith mesh ASCII file '"
+            msg << "Unknown I/O error while reading PyLith mesh PETSc file '"
                 << _filename << "'.\n";
             throw std::runtime_error(msg.str());
         } // catch

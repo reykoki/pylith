@@ -58,7 +58,7 @@ class MeshIOPETSc(MeshIOObj, ModuleMeshIOPETSc):
 
     # PUBLIC METHODS /////////////////////////////////////////////////////
 
-    def __init__(self, name="meshioascii"):
+    def __init__(self, name="meshiopetsc"):
         """Constructor.
         """
         MeshIOObj.__init__(self, name)

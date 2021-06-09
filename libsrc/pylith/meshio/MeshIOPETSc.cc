@@ -88,22 +88,13 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     
     assert(_mesh);
 
-    const int commRank = _mesh->commRank();
-    MPI_Comm comm = _mesh.comm()
+    MPI_Comm comm = _mesh->comm()
 
-    if (0 == commRank) {
-        std::ifstream filein(_filename.c_str());
-        if (!filein.is_open() || !filein.good()) {
-            std::ostringstream msg;
-            msg << "Could not open mesh file '" << _filename
-                << "' for reading.\n";
-            throw std::runtime_error(msg.str());
-        } // if
-
-        DMCreate(comm, filein, &dm);
-        DMSetType(dm, DMPLEX);
-        DMSetFromOptions(dm);
-    } // if
+    PetscDM dm = NULL;
+    DMCreate(comm, &dm);
+    DMSetType(dm, DMPLEX);
+    DMSetFromOptions(dm);
+    _mesh->dmMesh(dm);
 
     PYLITH_METHOD_END;
 } // read

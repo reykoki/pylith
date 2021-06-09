@@ -89,6 +89,7 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     assert(_mesh);
 
     const int commRank = _mesh->commRank();
+    MPI_Comm comm = _mesh.comm()
 
     if (0 == commRank) {
         std::ifstream filein(_filename.c_str());
@@ -99,7 +100,7 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
             throw std::runtime_error(msg.str());
         } // if
 
-        DMCreate(_mesh.comm, filein, &dm);
+        DMCreate(comm, filein, &dm);
         DMSetType(dm, DMPLEX);
         DMSetFromOptions(dm);
     } // if

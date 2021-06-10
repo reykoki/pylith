@@ -54,7 +54,6 @@ public:
 // ---------------------------------------------------------------------------------------------------------------------
 // Constructor
 pylith::meshio::MeshIOPETSc::MeshIOPETSc(void) :
-    _filename(""),
     _useIndexZero(true) { // constructor
     PyreComponent::setName("meshiopetsc");
 } // constructor

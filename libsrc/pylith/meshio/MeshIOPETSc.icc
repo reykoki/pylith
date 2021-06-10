@@ -20,20 +20,6 @@
 #error "MeshIOPETSc.icc must be included only from MeshIOPETSc.icc"
 #else
 
-// Set filename for PETSc file.
-inline
-void
-pylith::meshio::MeshIOPETSc::filename(const char* name) {
-  _filename = name;
-}
-
-// Get filename of PETSc file.
-inline
-const char* 
-pylith::meshio::MeshIOPETSc::filename(void) const {
-  return _filename.c_str();
-}
-
 #endif
 
 // End of file

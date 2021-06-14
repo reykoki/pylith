@@ -39,15 +39,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 namespace pylith {
     namespace meshio {
-        class _MeshIOPETSc {
-public:
-
-            static const char* groupTypeNames[];
-        }; // _MeshIOPETSc
-        const char* _MeshIOPETSc::_MeshIOPETSc::groupTypeNames[2] = {
-            "vertices",
-            "cells",
-        };
     } // meshio
 } // pylith
 

@@ -77,13 +77,13 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     PYLITH_COMPONENT_DEBUG("_read()");
     
     assert(_mesh);
-
     MPI_Comm comm = _mesh->comm();
+    PetscErrorCode err;
 
     PetscDM dm = NULL;
-    DMCreate(comm, &dm);
-    DMSetType(dm, DMPLEX);
-    DMSetFromOptions(dm);
+    err = DMCreate(comm, &dm);PYLITH_CHECK_ERROR(err);
+    err = DMSetType(dm, DMPLEX);PYLITH_CHECK_ERROR(err);
+    err = DMSetFromOptions(dm);PYLITH_CHECK_ERROR(err);
     _mesh->dmMesh(dm);
 
     PYLITH_METHOD_END;
@@ -93,6 +93,8 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
 // ---------------------------------------------------------------------------------------------------------------------
 // Write mesh to file.
 void
-pylith::meshio::MeshIOPETSc::_write(void) const {  } // write
+pylith::meshio::MeshIOPETSc::_write(void) const {  
+    PYLITH_JOURNAL_LOGICERROR("Writing meshes via MeshIOPetsc not implemented.");
+} // write
 
 

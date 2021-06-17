@@ -61,7 +61,6 @@ private:
 
 }; // MeshIOPETSc
 
-#include "MeshIOPETSc.icc" // inline methods
 
 #endif // pylith_meshio_meshiopetsc_hh
 

@@ -33,11 +33,15 @@ pylith::topology::ReverseCuthillMcKee::reorder(topology::Mesh* mesh) {
     PetscDMLabel dmLabel = NULL;
     PetscDM dmOrig = mesh->dmMesh();
     const char* const labelName = pylith::topology::Mesh::getCellsLabelName();
+    char str[] = "\n-------------\n";
     err = DMGetLabel(dmOrig, labelName, &dmLabel);PYLITH_CHECK_ERROR(err);
 
     PetscIS permutation = NULL;
     PetscDM dmNew = NULL;
     err = DMPlexGetOrdering(dmOrig, MATORDERINGRCM, dmLabel, &permutation);PYLITH_CHECK_ERROR(err);
+    printf("%s", str);
+    printf("%s", labelName);
+    printf("%s", str);
     err = DMPlexPermute(dmOrig, permutation, &dmNew);PYLITH_CHECK_ERROR(err);
     err = ISDestroy(&permutation);PYLITH_CHECK_ERROR(err);
     mesh->dmMesh(dmNew);

@@ -84,6 +84,7 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     err = DMCreate(comm, &dm);PYLITH_CHECK_ERROR(err);
     err = DMSetType(dm, DMPLEX);PYLITH_CHECK_ERROR(err);
     err = DMSetFromOptions(dm);PYLITH_CHECK_ERROR(err);
+    err = DMViewFromOptions(dm, NULL, "-dm_view");PYLITH_CHECK_ERROR(err);
     _mesh->dmMesh(dm);
 
     PYLITH_METHOD_END;

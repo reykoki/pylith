@@ -54,6 +54,9 @@ protected:
     /// Read mesh
     void _read(void);
 
+    /// Read mesh
+    void _label(void);
+    
     // PRIVATE MEMBERS /////////////////////////////////////////////////////////////////////////////////////////////////
 private:
 

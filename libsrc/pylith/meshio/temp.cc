@@ -79,6 +79,11 @@ pylith::meshio::MeshIOPETSc::_label(void) { // _label
     assert(_mesh);
     MPI_Comm comm = _mesh->comm();
     PetscErrorCode err;
+    DMLabel label = "material-id";
+
+    err = DMCreateLabel(_mesh, label);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetDefaultValue(label, 1);PYLITH_CHECK_ERROR(err);
+    err = DMSetLabelValue(dm, );PYLITH_CHECK_ERROR(err);
 } // label
 
 
@@ -98,22 +103,6 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     err = DMSetType(dm, DMPLEX);PYLITH_CHECK_ERROR(err);
     err = DMSetFromOptions(dm);PYLITH_CHECK_ERROR(err);
     err = DMViewFromOptions(dm, NULL, "-dm_view");PYLITH_CHECK_ERROR(err);
-
-    char labelName[] = "material-id";
-    DMLabel label;
-    err = DMCreateLabel(dm, labelName);PYLITH_CHECK_ERROR(err);
-    err = DMGetLabel(dm, labelName, &label);PYLITH_CHECK_ERROR(err);
-
-    PetscInt p, pStart, pEnd;
-    DMPlexGetHeightStratum(dm, 0, &pStart, &pEnd);
-    for (p=pStart; p < pEnd; p++) {
-        PetscInt val;
-        DMLabelSetValue(label, p, 1);
-        DMGetLabelValue(dm, "Face Sets", p, &val);
-        printf("value for face sets: %d\n", val);
-    }
-
-
     _mesh->dmMesh(dm);
 
     PYLITH_METHOD_END;

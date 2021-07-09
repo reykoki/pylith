@@ -103,16 +103,33 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     DMLabel label;
     err = DMCreateLabel(dm, labelName);PYLITH_CHECK_ERROR(err);
     err = DMGetLabel(dm, labelName, &label);PYLITH_CHECK_ERROR(err);
-
+    
     PetscInt p, pStart, pEnd;
     DMPlexGetHeightStratum(dm, 0, &pStart, &pEnd);
     for (p=pStart; p < pEnd; p++) {
         PetscInt val;
         DMLabelSetValue(label, p, 1);
-        DMGetLabelValue(dm, "Face Sets", p, &val);
-        printf("value for face sets: %d\n", val);
     }
+    
+    DMLabel face_sets_label;
+    err = DMGetLabel(dm, "Face Sets", &face_sets_label);PYLITH_CHECK_ERROR(err);
+    DMPlexLabelComplete(dm, face_sets_label);
 
+    IS is;
+    DMLabel xnegLabel;
+    char xnegName[] = "boundary_xneg";
+    DMCreateLabel(dm, xnegName);
+    DMGetLabel(dm, xnegName, &xnegLabel);
+    DMLabelGetStratumIS(face_sets_label, 1, &is);
+    DMLabelSetStratumIS(xnegLabel, 1, is);
+    
+    DMLabel xposLabel;
+    char xposName[] = "boundary_xpos";
+    DMCreateLabel(dm, xposName);
+    DMGetLabel(dm, xposName, &xposLabel);
+    DMLabelGetStratumIS(face_sets_label, 3, &is);
+    DMLabelSetStratumIS(xposLabel, 1, is);
+    
 
     _mesh->dmMesh(dm);
 

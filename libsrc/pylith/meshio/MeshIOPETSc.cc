@@ -130,6 +130,18 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     DMLabelGetStratumIS(face_sets_label, 3, &is);
     DMLabelSetStratumIS(xposLabel, 1, is);
     
+    DMLabel domainLabel;
+    char domainName[] = "domain_all";
+    DMCreateLabel(dm, domainName);
+    DMGetLabel(dm, domainName, &domainLabel);
+    DMLabelGetStratumIS(face_sets_label, 1, &is);
+    DMLabelSetStratumIS(domainLabel, 1, is);
+    DMLabelGetStratumIS(face_sets_label, 2, &is);
+    DMLabelSetStratumIS(domainLabel, 1, is);
+    DMLabelGetStratumIS(face_sets_label, 3, &is);
+    DMLabelSetStratumIS(domainLabel, 1, is);
+    DMLabelGetStratumIS(face_sets_label, 4, &is);
+    DMLabelSetStratumIS(domainLabel, 1, is);
 
     _mesh->dmMesh(dm);
 

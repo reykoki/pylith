@@ -105,43 +105,43 @@ pylith::meshio::MeshIOPETSc::_read(void) { // _read
     err = DMGetLabel(dm, labelName, &label);PYLITH_CHECK_ERROR(err);
     
     PetscInt p, pStart, pEnd;
-    DMPlexGetHeightStratum(dm, 0, &pStart, &pEnd);
+    err = DMPlexGetHeightStratum(dm, 0, &pStart, &pEnd);PYLITH_CHECK_ERROR(err);
     for (p=pStart; p < pEnd; p++) {
         PetscInt val;
-        DMLabelSetValue(label, p, 1);
+        err = DMLabelSetValue(label, p, 1);PYLITH_CHECK_ERROR(err);
     }
     
     DMLabel face_sets_label;
-    err = DMGetLabel(dm, "Face Sets", &face_sets_label);PYLITH_CHECK_ERROR(err);
-    DMPlexLabelComplete(dm, face_sets_label);
+    err = DMGetLabel(dm, "Face Sets", &face_sets_label);PYLITH_CHECK_ERROR(err);PYLITH_CHECK_ERROR(err);
+    err = DMPlexLabelComplete(dm, face_sets_label);PYLITH_CHECK_ERROR(err);
 
     IS is;
     DMLabel xnegLabel;
     char xnegName[] = "boundary_xneg";
-    DMCreateLabel(dm, xnegName);
-    DMGetLabel(dm, xnegName, &xnegLabel);
-    DMLabelGetStratumIS(face_sets_label, 1, &is);
-    DMLabelSetStratumIS(xnegLabel, 1, is);
+    err = DMCreateLabel(dm, xnegName);PYLITH_CHECK_ERROR(err);
+    err = DMGetLabel(dm, xnegName, &xnegLabel);PYLITH_CHECK_ERROR(err);
+    err = DMLabelGetStratumIS(face_sets_label, 1, &is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetStratumIS(xnegLabel, 1, is);PYLITH_CHECK_ERROR(err);
     
     DMLabel xposLabel;
     char xposName[] = "boundary_xpos";
-    DMCreateLabel(dm, xposName);
-    DMGetLabel(dm, xposName, &xposLabel);
-    DMLabelGetStratumIS(face_sets_label, 3, &is);
-    DMLabelSetStratumIS(xposLabel, 1, is);
+    err = DMCreateLabel(dm, xposName);PYLITH_CHECK_ERROR(err);
+    err = DMGetLabel(dm, xposName, &xposLabel);PYLITH_CHECK_ERROR(err);
+    err = DMLabelGetStratumIS(face_sets_label, 3, &is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetStratumIS(xposLabel, 1, is);PYLITH_CHECK_ERROR(err);
     
     DMLabel domainLabel;
     char domainName[] = "domain_all";
-    DMCreateLabel(dm, domainName);
-    DMGetLabel(dm, domainName, &domainLabel);
-    DMLabelGetStratumIS(face_sets_label, 1, &is);
-    DMLabelSetStratumIS(domainLabel, 1, is);
-    DMLabelGetStratumIS(face_sets_label, 2, &is);
-    DMLabelSetStratumIS(domainLabel, 1, is);
-    DMLabelGetStratumIS(face_sets_label, 3, &is);
-    DMLabelSetStratumIS(domainLabel, 1, is);
-    DMLabelGetStratumIS(face_sets_label, 4, &is);
-    DMLabelSetStratumIS(domainLabel, 1, is);
+    err = DMCreateLabel(dm, domainName);PYLITH_CHECK_ERROR(err);
+    err = DMGetLabel(dm, domainName, &domainLabel);PYLITH_CHECK_ERROR(err);
+    err = DMLabelGetStratumIS(face_sets_label, 1, &is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetStratumIS(domainLabel, 1, is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelGetStratumIS(face_sets_label, 2, &is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetStratumIS(domainLabel, 1, is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelGetStratumIS(face_sets_label, 3, &is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetStratumIS(domainLabel, 1, is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelGetStratumIS(face_sets_label, 4, &is);PYLITH_CHECK_ERROR(err);
+    err = DMLabelSetStratumIS(domainLabel, 1, is);PYLITH_CHECK_ERROR(err);
 
     _mesh->dmMesh(dm);
 

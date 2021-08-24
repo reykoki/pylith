@@ -96,6 +96,34 @@ public:
                          PointSet& noReplaceCells,
                          const int debug);
 
+    /** Get name of PETSc DM label for interfaces.
+     *
+     * @returns PETSc Label name.
+     */
+    static
+    const char* getInterfacesLabelName(void);
+
+    /** Get PETSc DM label for interfaces, creating if necessary.
+     *
+     * @param[inout] dm PETSc DM holding interfaces label.
+     * @returns PETSc DM label for interfaces.
+     */
+    static
+    PetscDMLabel getInterfacesLabel(PetscDM dm);
+
+    /** Get cells adjacent to cohesive cell on negative and positive sides of the fault.
+     *
+     * @param[out] adjacentCellNegative Adjacent cell on negative side of the fault.
+     * @param[out] adjacentCellPositive Adjacent cell on positive side of the fault.
+     * @param[in] dmMesh DM for finite-element mesh.
+     * @param[in] cohesiveCell Cohesive cell.
+     */
+    static
+    void getAdjacentCells(PylithInt* adjacentCellNegative,
+                          PylithInt* adjacentCellPositive,
+                          PetscDM dmMesh,
+                          const PylithInt cohesiveCell);
+
 }; // class TopologyOps
 
 #endif // pylith_faults_topologyops_hh

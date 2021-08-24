@@ -167,8 +167,6 @@ pylith::topology::TestReverseCuthillMcKee::testReorder(void) {
     Field::Discretization discretization;
     discretization.basisOrder = 1;
     discretization.quadOrder = 1;
-    discretization.isBasisContinuous = true;
-    discretization.feSpace = FieldBase::POLYNOMIAL_SPACE;
     fieldOrig.subfieldAdd(description, discretization);
     fieldOrig.subfieldsSetup();
     fieldOrig.createDiscretization();
@@ -227,12 +225,12 @@ pylith::topology::TestReverseCuthillMcKee::_initialize() {
 // Constructor
 pylith::topology::TestReverseCuthillMcKee_Data::TestReverseCuthillMcKee_Data(void) :
     filename(NULL),
-    faultLabel(NULL) {} // constructor
+    faultLabel(NULL) {}
 
 
 // ----------------------------------------------------------------------
 // Destructor
-pylith::topology::TestReverseCuthillMcKee_Data::~TestReverseCuthillMcKee_Data(void) {} // destructor
+pylith::topology::TestReverseCuthillMcKee_Data::~TestReverseCuthillMcKee_Data(void) {}
 
 
 // End of file
